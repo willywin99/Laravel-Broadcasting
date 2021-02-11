@@ -1,30 +1,13 @@
 <template>
     <div>
+
         <div class="chat-lists">
-            <div class="messages">
+            <div class="messages" v-for="chat in chats">
                 <div class="users">
-                    Willy <span class="time">2021-02-11; 23:04:20</span>
+                    {{ chat.user.name }} <span class="time">{{ chat.created_at }}</span>
                 </div>
                 <div class="message">
-                    "Pesan dari Willy"
-                </div>
-            </div>
-
-            <div class="messages">
-                <div class="users">
-                    Willy <span class="time">2021-02-11; 23:04:20</span>
-                </div>
-                <div class="message">
-                    "Pesan dari Ruby"
-                </div>
-            </div>
-
-            <div class="messages">
-                <div class="users">
-                    Willy <span class="time">2021-02-11; 23:04:20</span>
-                </div>
-                <div class="message">
-                    "Pesan dari Go"
+                    {{ chat.subject }}
                 </div>
             </div>
 
@@ -34,8 +17,27 @@
 
 <script>
     export default {
+        data() {
+            return{
+                chats: []
+            }
+        },
         mounted() {
-            console.log('Component mounted.')
+            this.getAllChats();
+        },
+        methods : {
+            getAllChats(){
+                axios.get('/chat/all-chats').then(response => {
+                    this.chats = response.data.reverse();
+                    this.scrollToBottom();
+                });
+            },
+            scrollToBottom(){
+                setTimeout(function(){
+                    let chatLists = document.getElementsByClassName('chat-lists')[0];
+                    chatLists.scrollTop = chatLists.scrollHeight
+                }, 1);
+            }
         }
     }
 </script>
@@ -49,5 +51,9 @@
         .message{
             font-size: 1.2rem;
         }
+    }
+    .chat-lists{
+        max-height: 300px;
+        overflow-y: scroll;
     }
 </style>

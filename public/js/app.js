@@ -2010,26 +2010,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      chats: []
+    };
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.getAllChats();
+  },
+  methods: {
+    getAllChats: function getAllChats() {
+      var _this = this;
+
+      axios.get('/chat/all-chats').then(function (response) {
+        _this.chats = response.data.reverse();
+
+        _this.scrollToBottom();
+      });
+    },
+    scrollToBottom: function scrollToBottom() {
+      setTimeout(function () {
+        var chatLists = document.getElementsByClassName('chat-lists')[0];
+        chatLists.scrollTop = chatLists.scrollHeight;
+      }, 1);
+    }
   }
 });
 
@@ -6522,7 +6527,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".messages {\n  margin-top: 5px;\n}\n.messages .time {\n  font-weight: 800;\n}\n.messages .message {\n  font-size: 1.2rem;\n}", ""]);
+exports.push([module.i, ".messages {\n  margin-top: 5px;\n}\n.messages .time {\n  font-weight: 800;\n}\n.messages .message {\n  font-size: 1.2rem;\n}\n.chat-lists {\n  max-height: 300px;\n  overflow-y: scroll;\n}", ""]);
 
 // exports
 
@@ -44549,57 +44554,31 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "chat-lists" }, [
-        _c("div", { staticClass: "messages" }, [
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "chat-lists" },
+      _vm._l(_vm.chats, function(chat) {
+        return _c("div", { staticClass: "messages" }, [
           _c("div", { staticClass: "users" }, [
-            _vm._v("\n                Willy "),
+            _vm._v("\n                " + _vm._s(chat.user.name) + " "),
             _c("span", { staticClass: "time" }, [
-              _vm._v("2021-02-11; 23:04:20")
+              _vm._v(_vm._s(chat.created_at))
             ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "message" }, [
-            _vm._v('\n                "Pesan dari Willy"\n            ')
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "messages" }, [
-          _c("div", { staticClass: "users" }, [
-            _vm._v("\n                Willy "),
-            _c("span", { staticClass: "time" }, [
-              _vm._v("2021-02-11; 23:04:20")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "message" }, [
-            _vm._v('\n                "Pesan dari Ruby"\n            ')
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "messages" }, [
-          _c("div", { staticClass: "users" }, [
-            _vm._v("\n                Willy "),
-            _c("span", { staticClass: "time" }, [
-              _vm._v("2021-02-11; 23:04:20")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "message" }, [
-            _vm._v('\n                "Pesan dari Go"\n            ')
+            _vm._v(
+              "\n                " + _vm._s(chat.subject) + "\n            "
+            )
           ])
         ])
-      ])
-    ])
-  }
-]
+      }),
+      0
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
