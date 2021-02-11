@@ -16,6 +16,8 @@
 </template>
 
 <script>
+    import BusEvent from '../../bus';
+
     export default {
         data() {
             return{
@@ -24,6 +26,10 @@
         },
         mounted() {
             this.getAllChats();
+            BusEvent.$on('chat.sent', (newChat) => {
+                this.chats.push(newChat);
+                this.scrollToBottom();
+            });
         },
         methods : {
             getAllChats(){
